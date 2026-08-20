@@ -28,6 +28,15 @@ jobs:
           mkdir site
           cat site.tar.gz.part-* > site.tar.gz
           tar -xzf site.tar.gz -C site
+      - name: Default to homepage
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          page = Path("site/index.html")
+          html = page.read_text()
+          script = '<script>history.replaceState(null,"",location.pathname+location.search);scrollTo(0,0)</script>'
+          page.write_text(html.replace("<head>", f"<head>{script}", 1))
+          PY
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
         with:
