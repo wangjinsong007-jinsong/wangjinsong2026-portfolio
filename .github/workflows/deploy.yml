@@ -34,7 +34,7 @@ jobs:
           from pathlib import Path
           page = Path("site/index.html")
           html = page.read_text()
-          script = '<script>history.replaceState(null,"",location.pathname+location.search);scrollTo(0,0)</script>'
+          script = '<script>history.scrollRestoration="manual";history.replaceState(null,"",location.pathname+location.search);(()=>{const reset=()=>scrollTo(0,0);reset();addEventListener("DOMContentLoaded",reset,{once:true});addEventListener("load",()=>{reset();setTimeout(reset,400)},{once:true})})()</script>'
           page.write_text(html.replace("<head>", f"<head>{script}", 1))
           PY
       - name: Configure GitHub Pages
